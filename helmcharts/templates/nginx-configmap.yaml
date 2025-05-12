@@ -7,22 +7,31 @@ metadata:
     app: nginx
   annotations:
     managed-by: Helm
-
 data:
   nginx.conf: |
-    proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=my_cache:10m;
+    user  nginx;
+    worker_processes  auto;
 
-    server {
-        listen 443 ssl;
-        server_name example.com;
+    events {
+        worker_connections  1024;
+    }
 
-        ssl_certificate     /etc/nginx/certs/tls.crt;
-        ssl_certificate_key /etc/nginx/certs/tls.key;
+    http {
+        # Proxy cache settings
+        proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=my_cache:10m;
 
-        location / {
-            proxy_pass http://app-service.myapp-ns.svc.cluster.local;
-            proxy_set_header Host $host;
-            proxy_cache my_cache;
-            proxy_cache_valid 200 1m;
+        server {
+            listen 443 ssl;
+            server_name example.com;
+
+            ssl_certificate     /etc/nginx/certs/tls.crt;
+            ssl_certificate_key /etc/nginx/certs/tls.key;
+
+            location / {
+                proxy_pass http://app-service.myapp-ns.svc.cluster.local;
+                proxy_set_header Host $host;
+                proxy_cache my_cache;
+                proxy_cache_valid 200 1m;
+            }
         }
     }
