@@ -2,6 +2,9 @@
 
 # Go App with NGINX Ingress on Kubernetes
 
+![image](https://github.com/user-attachments/assets/70296990-f887-4ef1-95e4-43b00d95e37c)
+
+
 ## Features
 - Load balancing
 - SSL termination (self-signed)
