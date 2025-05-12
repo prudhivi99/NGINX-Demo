@@ -1,9 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "helmcharts.fullname" . }}-test-connection"
-  labels:
-    {{- include "helmcharts.labels" . | nindent 4 }}
+  name: {{ .Chart.Name }}-test-connection
   annotations:
     "helm.sh/hook": test
 spec:
@@ -11,5 +9,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "helmcharts.fullname" . }}:{{ .Values.service.port }}']
+      args: ['app-service']
   restartPolicy: Never
