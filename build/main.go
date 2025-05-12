@@ -2,18 +2,21 @@ package main
 
 import (
     "fmt"
-    "log"
     "net/http"
     "os"
 )
 
-func handler(w http.ResponseWriter,r *http.Request){
-	hostname = os.Hostname()
-	fmt.Fprintf(w, "Hello from %s!\n", hostname)
+func handler(w http.ResponseWriter, r *http.Request) {
+    hostname, err := os.Hostname()
+    if err != nil {
+        hostname = "unknown"
+    }
+    fmt.Fprintf(w, "Hello from %s!\n", hostname)
 }
 
 func main() {
-	http.HandleFunc("/",handler)
-    log.Println("Starting server on :3000")
-	http.ListenAndServe(":3000",nil)
+    http.HandleFunc("/", handler)
+    fmt.Println("Server starting on port 8080...")
+    http.ListenAndServe(":8080", nil)
 }
+
