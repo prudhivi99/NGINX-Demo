@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-proxy
+  namespace: myapp-ns
 spec:
   replicas: 1
   selector:
@@ -23,10 +24,14 @@ spec:
               subPath: nginx.conf
             - name: certs
               mountPath: /etc/nginx/certs
+              readOnly: true
       volumes:
         - name: nginx-config
           configMap:
             name: nginx-config
+            items:
+              - key: nginx.conf
+                path: nginx.conf
         - name: certs
           secret:
             secretName: nginx-tls-secret
